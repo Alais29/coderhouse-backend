@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <input type="text">
+  <span></span>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/6.6.3/rxjs.umd.min.js"></script>
+
+  <script>
+    const { Observable } = rxjs
+
+    let input = document.querySelector('input')
+    let span = document.querySelector('span')
+
+    const setSpanValueAndResetInput = (value, resetInput) => {
+      span.innerHTML = value !== '' ? value : ''
+      if (resetInput) {
+        input.value = ''
+        input.disabled = true
+      }
+    }
+
+    const fromEvent = (node, eventName) => new Observable((observer) => {
+      function handler(event) {
+        let reversedValue = event.target.value.split('').reverse().join('')
+        observer.next(reversedValue)
+        if (event.target.value === 'error') {
+          observer.error('Error en el observable')
+        } else if (event.target.value === 'complete') {
+          observer.complete()
+        }
+      }
+      node.addEventListener(eventName, handler);
+      return () => {
+        node.removeEventListener(eventName, handler);
+      };
+    });
+
+    const inputEvent = fromEvent(input, 'input');
+    const subscription = inputEvent.subscribe({
+      next: (value) => setSpanValueAndResetInput(value, false),
+      error: (err) => {
+        console.log(err)
+        setSpanValueAndResetInput('', true)
+        subscription.unsubscribe()
+      },
+      complete: () => {
+        console.log('Observable termina de forma normal')
+        setSpanValueAndResetInput('', true)
+        subscription.unsubscribe()
+      }
+    });
+
+    setTimeout(() => {
+      console.log('Desuscripción automática')
+      setSpanValueAndResetInput('', true)
+      subscription.unsubscribe()
+    }, 30000)
+
+  </script>
+
+</body>
+
+</html>

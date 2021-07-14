@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <!--
+    Realizar un documento web que contenga un elemento input y que a medida de que escribo, se vaya mostrando a su derecha
+    el texto en forma espejada. Utilizar un Observable para realizar esa función.
+
+    Este comportamiento estará disponible por 30 segundos. Luego de ese tiempo, se realizará la desuscripción automática.
+
+    Si en el lapso de tiempo activo se escribe ‘error’, el Observable terminará por error. Si se ingresa ‘complete’, el
+    Observable terminará en forma normal. Indicar por la consola la razón del cierre de la función.
+
+    Una vez que el Observable no esté más operativo, desregistrar el evento de entrada, deshabilitar la escritura en el
+    input y borrar el resultado de la operación.
+  -->
+  <input type="text">
+  <span></span>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/rxjs/6.6.3/rxjs.umd.min.js"></script>
+
+  <script>
+    const { fromEvent, operators: { map, catchError, takeUntil, filter } } = rxjs
+
+    let input = document.querySelector('input')
+    let span = document.querySelector('span')
+
+    const setSpanValueAndResetInput = (value, resetInput) => {
+      span.innerHTML = value !== '' ? value : ''
+      if (resetInput) {
+        input.value = ''
+        input.disabled = true
+      }
+    }
+
+    const setSpanValue = (value) => span.innerHTML = value !== '' ? value : ''
+
+    const inputEvent = fromEvent(input, 'input')
+      .pipe(
+        map((event) => {
+          let returnValue = ''
+          let reversedValue = event.target.value.split('').reverse().join('')
+          if (event.target.value === 'error') {
+            throw "Error en el observable"
+          } else {
+            return reversedValue
+          }
+        }),
+        takeUntil(
+          fromEvent(input, 'input')
+            .pipe(
+              filter((event) => event.target.value === 'complete'),
+            )
+        ),
+        catchError((err) => {
+          throw err;
+        })
+      )
+
+    const subscription = inputEvent.subscribe(
+      value => setSpanValueAndResetInput(value, false),
+      err => {
+        console.log(err)
+        setSpanValueAndResetInput('', true)
+        subscription.unsubscribe()
+      },
+      () => {
+        console.log('Observable termina de forma normal')
+        setSpanValueAndResetInput('', true)
+        subscription.unsubscribe()
+      }
+    )
+
+    setTimeout(() => {
+      console.log('Desuscripción automática')
+      setSpanValueAndResetInput('', true)
+      subscription.unsubscribe()
+    }, 30000)
+
+
+  </script>
+
+</body>
+
+</html>
