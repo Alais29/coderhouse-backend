@@ -1,0 +1,26 @@
+[
+	{
+		"title": "Escuadra",
+		"price": 123.45,
+		"thumbnail": "www.test.com/escuadra.png",
+		"id": "241ac723-e200-45bd-9f1e-8014fe0184ad"
+	},
+	{
+		"title": "Calculadora",
+		"price": 234.56,
+		"thumbnail": "www.test.com/calculadora.png",
+		"id": "6b5321d7-9105-401c-b49f-33b0d6da6738"
+	},
+	{
+		"title": "Globo Terráqueo",
+		"price": 345.67,
+		"thumbnail": "www.test.com/globo-terraqueo.png",
+		"id": "c9ae9a4f-c6f6-42f8-b0cf-b75bf4f08b5c"
+	},
+	{
+		"title": "Regla",
+		"price": 140.75,
+		"thumbnail": "www.test.com/regla.png",
+		"id": "a40cb321-a5a5-450e-b01a-d7a1e9cf321f"
+	}
+]
