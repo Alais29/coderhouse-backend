@@ -1,0 +1,38 @@
+[
+	{
+		"title": "Globo Terráqueo",
+		"price": 350,
+		"thumbnail": "https://picsum.photos/300",
+		"id": "1059e3f0-79ff-40d7-b0b1-bfe146e4b344"
+	},
+	{
+		"title": "Calculadora",
+		"price": 250,
+		"thumbnail": "https://picsum.photos/300",
+		"id": "6b5321d7-9105-401c-b49f-33b0d6da6738"
+	},
+	{
+		"title": "Escuadra",
+		"price": 123.75,
+		"thumbnail": "https://picsum.photos/300",
+		"id": "9b33f22b-1218-49e8-94ba-33ed0b6fbb41"
+	},
+	{
+		"title": "Cuaderno",
+		"price": 120.1,
+		"thumbnail": "https://picsum.photos/300",
+		"id": "02f9dece-122b-4ec6-8bb8-bd7477ee7a96"
+	},
+	{
+		"title": "Regla",
+		"price": 70.2,
+		"thumbnail": "https://picsum.photos/300",
+		"id": "77b7d205-1fde-4760-8602-634035a35a5d"
+	},
+	{
+		"title": "Libro",
+		"price": 350,
+		"thumbnail": "https://picsum.photos/300",
+		"id": "ad4567c6-fad3-4eef-a515-776f21d40942"
+	}
+]
