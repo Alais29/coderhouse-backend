@@ -44,9 +44,7 @@ routes.post(
     try {
       const producto = req.body;
       await saveProducto(producto);
-      // res.json({ data: newProducto });
-      res.render('addProduct');
-      res.redirect('/productos/agregar');
+      res.redirect('/productos/vista');
     } catch (e) {
       res.json({ error: e });
     }

@@ -1,5 +1,5 @@
 <h1>Vista de productos</h1>
-{{#if productsExist}}
+{{#if data}}
 <table class="table table-dark table-striped">
   <thead>
     <tr>
@@ -11,9 +11,9 @@
   <tbody>
     {{#each data}}
     <tr class="table-dark">
-      <td class="table-dark">{{this.title}}</td>
-      <td class="table-dark">{{this.price}}</td>
-      <td class="table-dark"><img src="{{this.thumbnail}}" alt=""></td>
+      <td class="table-dark">{{title}}</td>
+      <td class="table-dark">{{price}}</td>
+      <td class="table-dark"><img style="width: 50px;" src="{{thumbnail}}" alt=""></td>
     </tr>
     {{/each}}
   </tbody>

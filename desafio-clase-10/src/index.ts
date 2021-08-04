@@ -35,8 +35,5 @@ app.use(express.static('public'));
 app.use('/api', routes);
 app.get('/productos/vista', async (req, res) => {
   const products = await getProductos();
-  res.render('main', { data: products, productsExist: products.length !== 0 });
-});
-app.get('/productos/agregar', async (req, res) => {
-  res.render('addProduct');
+  res.render('productos', { data: products });
 });
