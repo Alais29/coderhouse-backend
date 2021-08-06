@@ -1,0 +1,13 @@
+<div class="container">
+  <h1>Ingrese producto </h1>
+  <form action="/api/productos/guardar" method="POST">
+    <div class="mb-3"><label class="form-label" for="title">Nombre</label><input class="form-control" id="title"
+        type="text" name="title" aria-describedby="emailHelp" /></div>
+    <div class="mb-3"><label class="form-label" for="price">Precio</label><input class="form-control" id="price"
+        type="number" name="price" /></div>
+    <div class="mb-3"><label class="form-check-label" for="thumbnail">URL</label><input class="form-control"
+        id="thumbnail" type="url" name="thumbnail" /></div><button class="btn btn-primary"
+      type="submit">Guardar</button>
+  </form>
+</div>
+</body>

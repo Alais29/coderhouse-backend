@@ -1,0 +1,17 @@
+h1 Vista de productos
+if productsExist 
+  table(class="table table-dark table-striped")
+    thead 
+      tr 
+        th(scope="col") Nombre
+        th(scope="col") Precio
+        th(scope="col") Imagen
+    tbody 
+      each item in data
+        tr(class="table-dark")
+          td(class="table-dark")= item.title
+          td(class="table-dark")= item.price
+          td(class="table-dark")
+            img(style="width: 50px;" src=item.thumbnail)
+else
+    p(class="alert alert-danger") No hay productos

@@ -1,0 +1,12 @@
+h1 Ingrese producto 
+form(action='/api/productos/guardar' method='POST')
+  .mb-3
+    label.form-label(for='title') Nombre
+    input#title.form-control(type='text' name='title' aria-describedby='emailHelp')
+  .mb-3
+    label.form-label(for='price') Precio
+    input#price.form-control(type='number' name='price')
+  .mb-3
+    label.form-check-label(for='thumbnail') URL
+    input#thumbnail.form-control(type='url' name='thumbnail')
+  button.btn.btn-primary(type='submit') Guardar
