@@ -1,4 +1,3 @@
-import React from 'react'
 import { Table } from 'react-bootstrap';
 import { IItem } from '../../commons/interfaces';
 import cx from 'classnames/bind'

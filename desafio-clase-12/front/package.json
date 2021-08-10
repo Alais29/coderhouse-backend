@@ -14,6 +14,7 @@
     "axios": "^0.21.1",
     "bootstrap": "^5.0.2",
     "classnames": "^2.3.1",
+    "moment": "^2.29.1",
     "node-sass": "^4.14.1",
     "react": "^17.0.2",
     "react-bootstrap": "^2.0.0-beta.4",
@@ -23,7 +24,7 @@
     "typescript": "^4.1.2",
     "web-vitals": "^1.0.1"
   },
-  "proxy" : "http://localhost:8080/",
+  "proxy": "http://localhost:8080/",
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

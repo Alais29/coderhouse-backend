@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
+import socketClient  from "socket.io-client";
 import { IItem, IAlert } from './commons/interfaces';
 // import { getProducts } from './services/Productos';
-import { Alert, Container } from 'react-bootstrap';
+import { Alert, Col, Container, Row } from 'react-bootstrap';
 import ProductForm from './components/ProductForm/ProductForm';
 import ProductList from './components/ProductList/ProductList';
-import socketClient  from "socket.io-client";
+import ChatChannel from './components/ChatChannel/ChatChannel';
 
 const App = () => {
   const [productos, setProductos] = useState<IItem[] | []>([])
@@ -31,11 +32,18 @@ const App = () => {
 
   return (
     <Container>
-      <ProductForm productos={productos} setProductos={setProductos} />
-      {productos.length !== 0
-        ? <ProductList productos={productos} />
-        : alert.show && <Alert variant='danger'>{alert.text}</Alert>
-      }
+      <Row>
+        <Col sm='12' md='8'>
+          <ProductForm productos={productos} setProductos={setProductos} />
+          {productos.length !== 0
+            ? <ProductList productos={productos} />
+            : alert.show && <Alert variant='danger'>{alert.text}</Alert>
+          }
+        </Col>
+        <Col sm='12' md='4'>
+          <ChatChannel />
+        </Col>
+      </Row>
     </Container>
   );
 }
