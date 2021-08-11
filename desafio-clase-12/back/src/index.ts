@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import * as http from 'http';
@@ -27,33 +26,38 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 
 app.use('/api', routes);
+
 io.on('connection', async (socket: socketio.Socket) => {
   console.log('Nueva conexión');
   try {
     const productos = await getProductos();
     socket.emit('productos', productos);
-  } catch {
+  } catch (e) {
     socket.emit('productos error', {
-      error: 'Hubo un problema al listar los productos',
+      error: e.error,
+      message: e.message,
     });
   }
 
   socket.on('new product', (newProduct) => {
     saveProducto(newProduct)
       .then(() => {
+        socket.emit('success', null);
         getProductos()
           .then((productos) => {
             io.emit('productos', productos);
           })
-          .catch(() => {
+          .catch((e) => {
             socket.emit('productos error', {
-              error: 'Hubo un problema al listar los productos',
+              error: e.error,
+              message: e.message,
             });
           });
       })
-      .catch(() => {
+      .catch((e) => {
         socket.emit('save producto error', {
-          error: 'Hubo un problema al agregar el producto',
+          error: e.error,
+          message: e.message,
         });
       });
   });

@@ -1,6 +1,7 @@
 import React, { Dispatch, SetStateAction, useState } from 'react'
 import { Alert, Button, Form } from 'react-bootstrap'
 import { IItem, IAlert } from '../../commons/interfaces';
+import { isEmpty } from '../../utilities/others'
 // import { saveProduct } from '../../services/Productos';
 import socketClient  from "socket.io-client";
 
@@ -27,6 +28,7 @@ const ProductForm = ({ productos, setProductos }: IProductForm) => {
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
+    const {title, price, thumbnail} = formValues    
     // saveProduct(formValues)
     //   .then((newProduct) => {
     //     setProductos([
@@ -36,27 +38,33 @@ const ProductForm = ({ productos, setProductos }: IProductForm) => {
     //     setFormValues({ title: '', price: '', thumbnail: '' })
     //     setAlert({show: false, text: ''})
     //   })
-    //   .catch(() => {
-    //     setAlert({show: true, text: 'Hubo un problema al agregar el producto'})
+    //   .catch((e) => {
+    //     setAlert({ show: true, text: e.message })
     //   })
+
     const socket = socketClient('/');
-    socket.emit('new product', formValues)
+    if (isEmpty(title) || isEmpty(price) || isEmpty(thumbnail)) {
+      setAlert({ show: true, text: 'Todos los campos son requeridos' })
+    } else {
+      socket.emit('new product', formValues)
+      socket.on('success', () => {
+        setFormValues({ title: '', price: '', thumbnail: '' })
+      })
+    }
     socket.on('productos', (productos: IItem[]) => {
       setProductos(productos)
       setAlert({ show: false, text: '' })
-      setFormValues({ title: '', price: '', thumbnail: '' })
     })
     socket.on('productos error', (data) => {
-      setAlert({show: true, text: data.error})
+      setAlert({show: true, text: data.message})
     });
     socket.on('save producto error', (data) => {
-      setAlert({show: true, text: data.error})
+      setAlert({show: true, text: data.message})
     });
   }
 
   return (
     <>
-      {alert.show && <Alert variant="danger">{alert.text}</Alert>}
       <h1 className="text-center">Agrega un producto</h1>
       <Form onSubmit={handleSubmit}>
         <Form.Group className="mb-3" controlId="title">
@@ -65,12 +73,13 @@ const ProductForm = ({ productos, setProductos }: IProductForm) => {
         </Form.Group>
         <Form.Group className="mb-3" controlId="price">
           <Form.Label>Precio</Form.Label>
-          <Form.Control type="number" value={price} name="price" onChange={handleChange} />
+          <Form.Control type="text" value={price} name="price" onChange={handleChange} />
         </Form.Group>
         <Form.Group className="mb-3" controlId="thumbnail">
           <Form.Label>URL de imagen</Form.Label>
           <Form.Control type="url" value={thumbnail} name="thumbnail" onChange={handleChange} />
         </Form.Group>
+        {alert.show && <Alert variant="danger">{alert.text}</Alert>}
         <Button type="submit" className="mb-2">
           Guardar
         </Button>

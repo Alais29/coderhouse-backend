@@ -7,8 +7,8 @@ export const getProducts = async () => {
     const response = await axios.get(`${baseUrl}/listar`);
     return response.data.data;
   } catch (e) {
-    console.log(e);
-    throw Error(e);
+    console.log(e.response);
+    throw new Error(e.response.data.message);
   }
 };
 
@@ -17,7 +17,6 @@ export const saveProduct = async (newProduct: IItem) => {
     const response = await axios.post(`${baseUrl}/guardar`, newProduct);
     return response.data.data;
   } catch (e) {
-    console.log(e);
-    throw Error(e);
+    throw new Error(e.response.data.message);
   }
 };

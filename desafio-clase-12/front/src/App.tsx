@@ -2,10 +2,9 @@ import { useState, useEffect } from 'react';
 import socketClient  from "socket.io-client";
 import { IItem, IAlert } from './commons/interfaces';
 // import { getProducts } from './services/Productos';
-import { Alert, Col, Container, Row } from 'react-bootstrap';
+import { Alert, Container } from 'react-bootstrap';
 import ProductForm from './components/ProductForm/ProductForm';
 import ProductList from './components/ProductList/ProductList';
-import ChatChannel from './components/ChatChannel/ChatChannel';
 
 const App = () => {
   const [productos, setProductos] = useState<IItem[] | []>([])
@@ -15,10 +14,10 @@ const App = () => {
     // getProducts()
     // .then(products => {
     //   setProductos(products)
-    //   setAlert({show: false, text: ''})
+    //   setAlert({ show: false, text: '' })
     // })
-    // .catch(() => {
-    //   setAlert({show: true, text: 'Hubo un problema al listar los productos'})
+    // .catch((e) => {
+    //   setAlert({show: true, text: e.message})
     // })
     const socket = socketClient('/');
     socket.on('productos', (data) => {
@@ -26,24 +25,17 @@ const App = () => {
       setAlert({show: false, text: ''})
     });
     socket.on('productos error', (data) => {
-      setAlert({show: true, text: data.error})
+      setAlert({show: true, text: data.message})
     });
   }, [])
 
   return (
     <Container>
-      <Row>
-        <Col sm='12' md='8'>
-          <ProductForm productos={productos} setProductos={setProductos} />
-          {productos.length !== 0
-            ? <ProductList productos={productos} />
-            : alert.show && <Alert variant='danger'>{alert.text}</Alert>
-          }
-        </Col>
-        <Col sm='12' md='4'>
-          <ChatChannel />
-        </Col>
-      </Row>
+        <ProductForm productos={productos} setProductos={setProductos} />
+        {productos.length !== 0
+          ? <ProductList productos={productos} />
+          : alert.show && <Alert variant='danger'>{alert.text}</Alert>
+        }
     </Container>
   );
 }

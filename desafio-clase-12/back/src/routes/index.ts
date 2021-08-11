@@ -19,13 +19,14 @@ routes.get(
     try {
       const productos = await getProductos();
       if (productos.length !== 0) res.json({ data: productos });
-      else res.json({ error: 'no hay productos cargados' });
+      else throw new Error('No hay productos');
     } catch (e) {
-      res.json({ error: e });
+      res.status(400).json({ error: e.error, message: e.message });
     }
   }
 );
 
+// TODO: ADD PROPER ERROR HANDLING FOR getProducto
 routes.get(
   '/productos/listar/:id',
   async (req: Request, res: Response): Promise<void> => {
@@ -47,7 +48,7 @@ routes.post(
       const newProducto: IItem = await saveProducto(producto);
       res.json({ data: newProducto });
     } catch (e) {
-      res.json({ error: e });
+      res.status(400).json({ error: e.error, message: e.message });
     }
   }
 );
@@ -59,7 +60,7 @@ routes.put(
       const producto = await updateProducto(req.params.id, req.body);
       res.json({ data: producto });
     } catch (e) {
-      res.json({ error: e });
+      res.status(404).json({ error: e.error, message: e.message });
     }
   }
 );
@@ -72,7 +73,7 @@ routes.delete(
       const productos = await getProductos();
       res.json({ data: productos });
     } catch (e) {
-      res.json({ error: e });
+      res.status(404).json({ error: e.error, message: e.message });
     }
   }
 );
