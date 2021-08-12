@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express from 'express';
 import cors from 'cors';
 import * as http from 'http';
 import * as socketio from 'socket.io';
@@ -9,16 +9,16 @@ import { Productos } from './services/producto';
 const app: express.Application = express();
 const PORT = 8080;
 
-// const server = app.listen(PORT, () => {
-//   console.log(`Servidor inicializado en el puerto ${PORT}`);
-// });
-// server.on('error', (error) => console.log(`Error en el servidor: ${error}`));
-
 const { getProductos, saveProducto } = new Productos();
 
 const server: http.Server = http.createServer(app);
 const io: socketio.Server = new socketio.Server();
 io.attach(server);
+
+server.listen(PORT, () => {
+  console.log(`Servidor inicializado en http://localhost:${PORT}`);
+});
+server.on('error', (error) => console.log(`Error en el servidor: ${error}`));
 
 app.use(express.static(path.resolve(__dirname, '../', 'public')));
 app.use(express.json());
@@ -62,8 +62,3 @@ io.on('connection', async (socket: socketio.Socket) => {
       });
   });
 });
-
-server.listen(PORT, () => {
-  console.log(`Servidor inicializado en http://localhost:${PORT}`);
-});
-server.on('error', (error) => console.log(`Error en el servidor: ${error}`));

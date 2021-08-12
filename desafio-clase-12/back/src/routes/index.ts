@@ -1,5 +1,4 @@
 import express, { Request, Response } from 'express';
-import path from 'path';
 import { IItem } from '../common/interfaces';
 import { Productos } from '../services/producto';
 
@@ -26,16 +25,15 @@ routes.get(
   }
 );
 
-// TODO: ADD PROPER ERROR HANDLING FOR getProducto
 routes.get(
   '/productos/listar/:id',
   async (req: Request, res: Response): Promise<void> => {
     try {
       const producto = await getProducto(req.params.id);
       if (producto) res.json({ data: producto });
-      else res.json({ error: 'Producto no encontrado' });
+      else throw new Error('Producto no encontrado');
     } catch (e) {
-      res.json({ error: e });
+      res.status(400).json({ error: e.error, message: e.message });
     }
   }
 );

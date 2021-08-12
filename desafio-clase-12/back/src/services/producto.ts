@@ -22,7 +22,7 @@ export class Productos {
       const producto = productosJSON.filter((item: IItem) => item.id === id)[0];
       return producto;
     } catch (e) {
-      throw new Error(e);
+      throw { error: e, message: 'Hubo un problema al cargar el producto' };
     }
   }
 

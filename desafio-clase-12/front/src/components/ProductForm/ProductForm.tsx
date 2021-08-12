@@ -50,17 +50,17 @@ const ProductForm = ({ productos, setProductos }: IProductForm) => {
       socket.on('success', () => {
         setFormValues({ title: '', price: '', thumbnail: '' })
       })
+      socket.on('productos', (productos: IItem[]) => {
+        setProductos(productos)
+        setAlert({ show: false, text: '' })
+      })
+      socket.on('productos error', (data) => {
+        setAlert({show: true, text: data.message})
+      });
+      socket.on('save producto error', (data) => {
+        setAlert({show: true, text: data.message})
+      });
     }
-    socket.on('productos', (productos: IItem[]) => {
-      setProductos(productos)
-      setAlert({ show: false, text: '' })
-    })
-    socket.on('productos error', (data) => {
-      setAlert({show: true, text: data.message})
-    });
-    socket.on('save producto error', (data) => {
-      setAlert({show: true, text: data.message})
-    });
   }
 
   return (
