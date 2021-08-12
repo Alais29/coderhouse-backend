@@ -27,6 +27,24 @@ app.use(cors());
 
 app.use('/api', routes);
 
+const mensajes = [
+  {
+    email: 'juan@gmail.com',
+    text: '¡Hola! ¿Que tal?',
+    date: new Date(),
+  },
+  {
+    email: 'pedro@gmail.com',
+    text: '¡Muy bien! ¿Y vos?',
+    date: new Date(),
+  },
+  {
+    email: 'ana@gmail.com',
+    text: '¡Genial!',
+    date: new Date(),
+  },
+];
+
 io.on('connection', async (socket: socketio.Socket) => {
   console.log('Nueva conexión');
   try {
@@ -38,6 +56,13 @@ io.on('connection', async (socket: socketio.Socket) => {
       message: e.message,
     });
   }
+
+  socket.emit('messages', mensajes);
+  socket.on('new message', (newMessage) => {
+    newMessage.date = new Date();
+    mensajes.push(newMessage);
+    io.emit('messages', mensajes);
+  });
 
   socket.on('new product', (newProduct) => {
     saveProducto(newProduct)

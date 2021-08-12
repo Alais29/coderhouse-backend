@@ -34,23 +34,5 @@
 		"price": 200,
 		"thumbnail": "https://cdn3.iconfinder.com/data/icons/education-209/64/calculator-math-tool-school-256.png",
 		"id": "6b5321d7-9105-401c-b49f-33b0d6da6738"
-	},
-	{
-		"title": "Bolso",
-		"price": 321,
-		"thumbnail": "https://cdn4.iconfinder.com/data/icons/back-to-school-149/64/backpack-school-bag-school-education-256.png",
-		"id": "cb46f9f1-4c35-47fb-ae9f-e7d1fcd77987"
-	},
-	{
-		"title": "asd",
-		"price": 234,
-		"thumbnail": "https://cdn4.iconfinder.com/data/icons/back-to-school-149/64/backpack-school-bag-school-education-256.png",
-		"id": "7fae8ed1-937f-4f24-9b7c-f20cd8018f36"
-	},
-	{
-		"title": "Bolso",
-		"price": 45,
-		"thumbnail": "https://cdn4.iconfinder.com/data/icons/back-to-school-149/64/backpack-school-bag-school-education-256.png",
-		"id": "33babaf2-d5e9-4513-9758-0617734b897b"
 	}
 ]

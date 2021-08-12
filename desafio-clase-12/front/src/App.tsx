@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
-import socketClient  from "socket.io-client";
+import { socket } from './services/socket';
 import { IItem, IAlert } from './commons/interfaces';
 // import { getProducts } from './services/Productos';
-import { Alert, Container } from 'react-bootstrap';
+import { Alert, Col, Container, Row } from 'react-bootstrap';
 import ProductForm from './components/ProductForm/ProductForm';
 import ProductList from './components/ProductList/ProductList';
+import ChatChannel from './components/ChatChannel/ChatChannel';
 
 const App = () => {
   const [productos, setProductos] = useState<IItem[] | []>([])
@@ -19,7 +20,6 @@ const App = () => {
     // .catch((e) => {
     //   setAlert({show: true, text: e.message})
     // })
-    const socket = socketClient('/');
     socket.on('productos', (data) => {
       setProductos(data)
       setAlert({show: false, text: ''})
@@ -27,15 +27,26 @@ const App = () => {
     socket.on('productos error', (data) => {
       setAlert({show: true, text: data.message})
     });
+
+    return () => {
+      socket.disconnect();
+    }
   }, [])
 
   return (
     <Container>
-        <ProductForm productos={productos} setProductos={setProductos} />
-        {productos.length !== 0
-          ? <ProductList productos={productos} />
-          : alert.show && <Alert variant='danger'>{alert.text}</Alert>
-        }
+      <Row>
+        <Col lg="8" sm="12">
+          <ProductForm productos={productos} setProductos={setProductos} />
+          {productos.length !== 0
+            ? <ProductList productos={productos} />
+            : alert.show && <Alert variant='danger'>{alert.text}</Alert>
+          }
+        </Col>
+        <Col lg="4" sm="12">
+          <ChatChannel />
+        </Col>
+      </Row>
     </Container>
   );
 }

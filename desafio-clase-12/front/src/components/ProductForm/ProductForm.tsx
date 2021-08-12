@@ -2,8 +2,8 @@ import React, { Dispatch, SetStateAction, useState } from 'react'
 import { Alert, Button, Form } from 'react-bootstrap'
 import { IItem, IAlert } from '../../commons/interfaces';
 import { isEmpty } from '../../utilities/others'
+import { socket } from '../../services/socket';
 // import { saveProduct } from '../../services/Productos';
-import socketClient  from "socket.io-client";
 
 interface IProductForm {
   setProductos: Dispatch<SetStateAction<IItem[]>>
@@ -28,7 +28,6 @@ const ProductForm = ({ productos, setProductos }: IProductForm) => {
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
-    const {title, price, thumbnail} = formValues    
     // saveProduct(formValues)
     //   .then((newProduct) => {
     //     setProductos([
@@ -42,7 +41,6 @@ const ProductForm = ({ productos, setProductos }: IProductForm) => {
     //     setAlert({ show: true, text: e.message })
     //   })
 
-    const socket = socketClient('/');
     if (isEmpty(title) || isEmpty(price) || isEmpty(thumbnail)) {
       setAlert({ show: true, text: 'Todos los campos son requeridos' })
     } else {
