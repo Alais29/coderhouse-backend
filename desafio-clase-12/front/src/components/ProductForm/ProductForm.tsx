@@ -44,13 +44,13 @@ const ProductForm = ({ productos, setProductos }: IProductForm) => {
     if (isEmpty(title) || isEmpty(price) || isEmpty(thumbnail)) {
       setAlert({ show: true, text: 'Todos los campos son requeridos' })
     } else {
+      setAlert({ show: false, text: '' })
       socket.emit('new product', formValues)
-      socket.on('success', () => {
+      socket.on('save product success', () => {
         setFormValues({ title: '', price: '', thumbnail: '' })
       })
       socket.on('productos', (productos: IItem[]) => {
         setProductos(productos)
-        setAlert({ show: false, text: '' })
       })
       socket.on('productos error', (data) => {
         setAlert({show: true, text: data.message})

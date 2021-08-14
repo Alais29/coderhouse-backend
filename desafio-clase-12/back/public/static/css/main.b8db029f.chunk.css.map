@@ -1,1 +1,0 @@
-{"version":3,"sources":["webpack://src/components/ProductList/styles.module.scss"],"names":[],"mappings":"AAAA,2BACE,UAAW","file":"main.b8db029f.chunk.css","sourcesContent":[".product-img {\r\n  width: 50px;\r\n}\r\n"]}

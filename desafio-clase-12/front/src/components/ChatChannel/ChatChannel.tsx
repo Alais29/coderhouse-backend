@@ -1,28 +1,27 @@
-import { useEffect, useState } from 'react';
-import moment from 'moment';
-import {socket} from '../../services/socket'
-import { Button, Form } from 'react-bootstrap'
+import { useEffect, useRef, useState } from 'react';
+import { socket } from '../../services/socket'
+import { isEmpty } from '../../utilities/others';
+import { IAlert } from '../../commons/interfaces';
+import { Alert, Button, Form } from 'react-bootstrap'
 import cx from 'classnames/bind'
 import styles from './styles.module.scss'
-
-// const mensajesMock = [
-//   { email: "juan@gmail.com", text: "¡Hola! ¿Que tal?", date: moment().format('DD/MM/YYYY, h:mm:ss a') },
-//   { email: "pedro@gmail.com", text: "¡Muy bien! ¿Y vos?", date: moment().format('DD/MM/YYYY, h:mm:ss a') },
-//   { email: "ana@gmail.com", text: "¡Genial!", date: moment().format('DD/MM/YYYY, h:mm:ss a') },
-// ]
 
 interface IMessage {
   email: string
   text: string
-  date: Date
+  date: string
 }
 
+//TODO agregar validación al mail
 const ChatChannel = () => {
   const [formValues, setFormValues] = useState({
     email: '',
     text: ''
   });
   const [messages, setMessages] = useState<IMessage[]>([])
+  const [alert, setAlert] = useState<IAlert>({ show: false, text: '' })
+  const {email, text} = formValues
+  const emailRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     socket.on('messages', (data) => {
@@ -39,15 +38,31 @@ const ChatChannel = () => {
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault()
-    // TODO form is not resetting on submit
-    // setFormValues({
-    //   ...formValues,
-    //   text: ''
-    // })
-    socket.emit('new message', formValues)
-    socket.on('messages', (data) => {
-      setMessages(data)
-    })
+
+    if (isEmpty(email) || isEmpty(text)) {
+      setAlert({show: true, text: 'Ambos campos son obligatorios'})
+    } else {
+      setAlert({show: false, text: ''})
+      socket.emit('new message', formValues)
+      socket.on('save message success', () => {
+        setFormValues({
+          ...formValues,
+          text: ''
+        })
+      })
+      socket.on('messages', (data) => {
+        setMessages(data)
+        if (emailRef.current) {
+          emailRef.current.disabled = true;
+        }
+      })
+      socket.on('messages error', (data) => {
+        setAlert({show: true, text: data.message})
+      })
+      socket.on('save message error', (data) => {
+        setAlert({show: true, text: data.message})
+      })
+    }
   }
 
   return (
@@ -60,17 +75,20 @@ const ChatChannel = () => {
               <span className={cx(styles['chat-channel__message-email'])}>{msg.email}: </span>
               <span className={cx(styles['chat-channel__message-text'])}>{msg.text}</span>
             </p>
-            <small className={cx(styles['chat-channel__message-date'])}>{moment(msg.date).format('DD/MM/YYYY, h:mm:ss a')}</small>
+            <small className={cx(styles['chat-channel__message-date'])}>{msg.date}</small>
           </div>
         ))}
       </div>
       <Form onSubmit={handleSubmit}>
         <div className={cx(styles['chat-channel__form'])}>
-          <Form.Control onChange={handleChange} name="email" type="email" placeholder="Email" />
-          <Form.Control onChange={handleChange} name="text" type="text" placeholder="Ingresa un mensaje" />
+          <Form.Control value={email} onChange={handleChange} name="email" type="text" placeholder="Email" ref={emailRef} />
+          <Form.Control value={text} onChange={handleChange} name="text" type="text" placeholder="Ingresa un mensaje" />
           <Button className="w-100" variant="primary" type="submit">Enviar</Button>
         </div>
       </Form>
+      {alert.show &&
+        <Alert variant="warning" className="mt-3">{alert.text}</Alert>
+      }
     </div>
   )
 }
