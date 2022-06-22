@@ -1,0 +1,18 @@
+Etheral account credentials
+Name		Patrick Spinka
+Username	patrick.spinka16@ethereal.email (also works as a real inbound email address)
+Password	Yk4vYw9TBqsZMjGdJE
+
+Nodemailer configuration
+const transporter = nodemailer.createTransport({
+    host: 'smtp.ethereal.email',
+    port: 587,
+    auth: {
+        user: 'patrick.spinka16@ethereal.email',
+        pass: 'Yk4vYw9TBqsZMjGdJE'
+    }
+});
+
+
+Contraseña Gmail
+vidtieqvxgbetsxr
